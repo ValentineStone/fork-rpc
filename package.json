@@ -1,0 +1,27 @@
+{
+  "name": "@valentine-stone/fork-rpc",
+  "version": "0.0.2",
+  "description": "Node forked child_process async class-based rpc",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ValentineStone/fork-rpc.git"
+  },
+  "keywords": [
+    "fork",
+    "child_process",
+    "rpc",
+    "async",
+    "class",
+    "typescript"
+  ],
+  "author": "Leonid Romanovsky <sirLeonidRomanovsky@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ValentineStone/fork-rpc/issues"
+  },
+  "homepage": "https://github.com/ValentineStone/fork-rpc#readme",
+  "devDependencies": {
+    "@types/node": "^15.0.3"
+  }
+}
