@@ -1,4 +1,4 @@
 import { rpcProvider } from './provider'
-import { Mathr } from './example.class'
+import { Mathr } from './example.main'
 
 rpcProvider(Mathr)

@@ -1,4 +1,6 @@
+import { eeRpcfy } from './ee-rpc'
 import type { ChildProcess } from 'child_process'
+import { EventEmitter } from 'events'
 
 const promise_guts = <T = any>() => {
   let guts = {} as {
@@ -29,7 +31,15 @@ export const rpcConsumer = <Class, Args>(
 ) => {
   const methods = Object.getOwnPropertyNames(Constructor.prototype)
   const callbacks: { [key: string]: ReturnType<typeof promise_guts> } = {}
-  const proxy = {} as AsyncClass<Class>
+  let proxy: AsyncClass<Class>
+  if (Constructor.prototype instanceof EventEmitter) {
+    proxy = eeRpcfy(
+      child_process,
+      new EventEmitter()
+    ) as unknown as AsyncClass<Class>
+  } else {
+    proxy = {} as AsyncClass<Class>
+  }
   child_process.send({ method: 'constructor', args })
   let callidCounter = 1
   for (const method of methods) {
@@ -49,6 +59,9 @@ export const rpcConsumer = <Class, Args>(
       else
         callbacks[callid].resolve(resolve)
       delete callbacks[callid]
+    }
+    if (value?.event && proxy instanceof EventEmitter) {
+      (proxy as any).emitLocal(value.event, ...value.args)
     }
   })
   return proxy

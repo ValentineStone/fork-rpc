@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rpcConsumer = void 0;
+const ee_rpc_1 = require("./ee-rpc");
+const events_1 = require("events");
 const promise_guts = () => {
     let guts = {};
     guts.promise = new Promise((resolve, reject) => {
@@ -21,7 +23,13 @@ const promise_guts = () => {
 const rpcConsumer = (child_process, Constructor, ...args) => {
     const methods = Object.getOwnPropertyNames(Constructor.prototype);
     const callbacks = {};
-    const proxy = {};
+    let proxy;
+    if (Constructor.prototype instanceof events_1.EventEmitter) {
+        proxy = ee_rpc_1.eeRpcfy(child_process, new events_1.EventEmitter());
+    }
+    else {
+        proxy = {};
+    }
     child_process.send({ method: 'constructor', args });
     let callidCounter = 1;
     for (const method of methods) {
@@ -42,6 +50,9 @@ const rpcConsumer = (child_process, Constructor, ...args) => {
             else
                 callbacks[callid].resolve(resolve);
             delete callbacks[callid];
+        }
+        if ((value === null || value === void 0 ? void 0 : value.event) && proxy instanceof events_1.EventEmitter) {
+            proxy.emitLocal(value.event, ...value.args);
         }
     });
     return proxy;

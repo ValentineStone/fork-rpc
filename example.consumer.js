@@ -11,11 +11,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
 const consumer_1 = require("./consumer");
-const example_class_1 = require("./example.class");
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    const forked = child_process_1.fork(__filename.replace('.js', '.fork.js'));
-    const mathr = consumer_1.rpcConsumer(forked, example_class_1.Mathr, 4, 10);
+const example_main_1 = require("./example.main");
+exports.default = () => __awaiter(void 0, void 0, void 0, function* () {
+    const forked = child_process_1.fork('./example.provider');
+    const mathr = consumer_1.rpcConsumer(forked, example_main_1.Mathr, 4, 10);
+    mathr.on('yey', console.log);
     const res = yield mathr.add(NaN, NaN);
     console.log(res);
     yield mathr.nono().catch(console.error);
-}))();
+});

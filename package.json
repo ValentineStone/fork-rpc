@@ -1,6 +1,6 @@
 {
   "name": "@valentine-stone/fork-rpc",
-  "version": "0.0.2",
+  "version": "0.1.1",
   "description": "Node forked child_process async class-based rpc",
   "main": "index.js",
   "repository": {
